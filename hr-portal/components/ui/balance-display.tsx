@@ -9,12 +9,11 @@ import { formatUnits } from 'viem';
 // import { getBalance } from '@/utils/mockUSDCUtils';
 // import { } from 'wagmi';
 import { config } from '@/config';
-import {getTreasuryBalanceUSD , getBalance} from "@/utils/mockUSDCUtils"
+import { getBalance} from "@/utils/mockUSDCUtils"
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 export function BalanceDisplay() {
   const { address, isConnected } = useAccount();
-  const [nativeBalance, setNativeBalance] = useState<string>('0');
   const [usdcBalance, setUsdcBalance] = useState<string>('0');
   const [loading, setLoading] = useState(true);
 
