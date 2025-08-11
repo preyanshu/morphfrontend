@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import { treasuryApi } from '@/lib/api';
 import { TreasuryTransaction } from '@/types';
 import { LoadingSpinnerFull } from '@/components/ui/loading-spinner';
+import { parseUnits } from 'viem';
 
 export default function TreasuryPage() {
   const { isConnected, address } = useAccount();
@@ -60,7 +61,7 @@ export default function TreasuryPage() {
 
     try {
       // Convert USD amount to USDC units (6 decimals)
-      const amountInUSDC = Math.floor(amount * 1000000).toString();
+      const amountInUSDC = parseUnits(amount.toString(), 18).toString();
       
       // Execute the transaction
       const tx = await fundTreasuryWithApprove(amountInUSDC);
@@ -106,7 +107,7 @@ export default function TreasuryPage() {
 
     try {
       // Convert USD amount to USDC units (6 decimals)
-      const amountInUSDC = Math.floor(amount * 1000000).toString();
+      const amountInUSDC = parseUnits(amount.toString(), 18).toString();
       
       // Execute the transaction
       const tx = await withdrawFromTreasury(amountInUSDC);

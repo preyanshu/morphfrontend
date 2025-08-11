@@ -23,6 +23,7 @@ import { batchPayEmployees } from '@/utils/payrollContractUtils';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { config } from '@/config';
 import { LoadingSpinner, LoadingDots } from '@/components/ui/loading-spinner';
+import { MorphHoleskyTestnet } from '@/config';
 
 interface PayoutFormProps {
   selectedEmployees: Employee[];
@@ -89,7 +90,8 @@ export function PayoutForm({ selectedEmployees, onPayoutCreated, onClearSelectio
       const confirmationStartTime = Date.now();
       try {
         const receipt = await waitForTransactionReceipt(config, {
-          hash: tx as `0x${string}`
+          hash: tx as `0x${string}`,
+          confirmations :3
           
         });
         
@@ -214,10 +216,10 @@ export function PayoutForm({ selectedEmployees, onPayoutCreated, onClearSelectio
                   <p className="text-sm text-muted-foreground">
                     Executing batch payment on blockchain...
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  {/* <p className="text-xs text-muted-foreground">
                     Waiting for 3 confirmations...
                   </p>
-                  <LoadingDots />
+                  <LoadingDots /> */}
                 </div>
               )}
             </div>
@@ -248,12 +250,12 @@ export function PayoutForm({ selectedEmployees, onPayoutCreated, onClearSelectio
                   </div>
                   <div className="pt-2">
                     <a 
-                      href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                      href={`${MorphHoleskyTestnet.blockExplorers.default.url}/tx/${txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-primary hover:underline text-sm"
                     >
-                      View on Etherscan →
+                      View on Explorer →
                     </a>
                   </div>
                 </CardContent>

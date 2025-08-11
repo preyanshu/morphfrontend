@@ -6,10 +6,11 @@ import { StatsCard } from '@/components/dashboard/stats-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { employeeApi, payoutApi } from '@/lib/api';
 import { Employee, PayoutBatch } from '@/types';
-import { Users, DollarSign, TrendingUp, Calendar, Wallet } from 'lucide-react';
+import { Users, DollarSign, TrendingUp, Calendar, Wallet , ExternalLink} from 'lucide-react';
 import { getTreasuryBalanceUSD } from '@/utils/mockUSDCUtils';
 import { useAccount } from 'wagmi';
 import { LoadingSpinnerFull } from '@/components/ui/loading-spinner';
+import { MorphHoleskyTestnet } from '@/config';
 
 export default function Dashboard() {
   const { isConnected } = useAccount();
@@ -145,22 +146,40 @@ export default function Dashboard() {
           <CardContent className="flex-1">
             <div className="space-y-4">
               {batches.slice(0, 5).map((batch) => (
-                <div key={batch._id} className="flex items-center space-x-4">
-                  <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center">
-                    <DollarSign className="h-4 w-4 text-primary" />
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    <p className="text-sm font-medium leading-none text-foreground">
-                      ${batch.totalAmount.toLocaleString()}
-                    </p>
-                    <p className="text-xs text-muted-foreground font-mono">
-                      {batch.txHash.slice(0, 10)}...
-                    </p>
-                  </div>
-                  <div className="text-xs text-muted-foreground">
-                    {formatDistanceToNow(new Date(batch.createdAt), { addSuffix: true })}
-                  </div>
-                </div>
+               <div key={batch._id} className="flex items-center space-x-4">
+  <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center">
+    <DollarSign className="h-4 w-4 text-primary" />
+  </div>
+
+  <div className="flex-1 space-y-1">
+    <p className="text-sm font-medium leading-none text-foreground">
+      ${batch.totalAmount.toLocaleString()}
+    </p>
+
+    <div className="inline-flex items-center space-x-1 font-mono text-xs text-muted-foreground">
+      {/* Only the hash has the tooltip */}
+      <span title={batch.txHash}>
+        {batch.txHash.slice(0, 6)}...{batch.txHash.slice(-4)}
+      </span>
+
+      <a
+        href={`${MorphHoleskyTestnet.blockExplorers.default.url}/tx/${batch.txHash}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-muted-foreground hover:text-primary"
+      >
+        <ExternalLink className="h-3 w-3" />
+      </a>
+    </div>
+  </div>
+
+  <div className="text-xs text-muted-foreground">
+    {formatDistanceToNow(new Date(batch.createdAt), { addSuffix: true })}
+  </div>
+</div>
+
+
+
               ))}
               {batches.length === 0 && (
                 <div className="text-center py-8 text-muted-foreground">

@@ -2,6 +2,7 @@ import { readContract, writeContract } from '@wagmi/core';
 import { config } from "@/config";
 import { mockUSDCABI } from './abis';
 import { MOCK_USDC_ADDRESS, PAYROLL_CONTRACT_ADDRESS } from './addresses';
+import { formatUnits } from 'viem';
 
 // Get balance of an address
 export async function getBalance(address: string): Promise<string> {
@@ -31,7 +32,7 @@ export async function getTreasuryBalanceUSD(): Promise<number> {
 
     console.log(balance);
     // Convert from wei to USD (assuming 6 decimals for USDC)
-    return parseFloat(balance) / 1000000;
+    return Number(formatUnits(BigInt(balance), 18));;
   } catch (error) {
     console.error('Error getting treasury balance in USD:', error);
     return 0;
